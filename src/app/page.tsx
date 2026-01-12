@@ -1,14 +1,15 @@
 "use client";
-
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import CitySearch from "@/components/CitySearch";
 import GeoButton from "@/components/GeoButton";
 import CurrentWeatherCard from "@/components/CurrentWeatherCard";
 import HourlyChart from "@/components/HourlyChart";
 import DailyForecast from "@/components/DailyForecast";
-import Favorites from "@/components/Favorites";
 import GeoPrompt from "@/components/GeoPrompt";
 import CityBackground from "@/components/CityBackground";
+
+const Favorites = dynamic(() => import("@/components/Favorites"), { ssr: false });
 
 import type { City } from "@/lib/types";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { City } from "@/lib/types";
 import { cityKey, loadFavorites, saveFavorites } from "@/lib/storage";
 import GlassCard from "./GlassCard";
@@ -12,13 +12,8 @@ export default function Favorites({
   current: City | null;
   onPick: (c: City) => void;
 }) {
-  const [mounted, setMounted] = useState(false);
-  const [items, setItems] = useState<City[]>([]);
-
-  useEffect(() => {
-    setMounted(true);
-    setItems(loadFavorites());
-  }, []);
+  // тепер можна сміливо читати localStorage тут, бо SSR вимкнено
+  const [items, setItems] = useState<City[]>(() => loadFavorites());
 
   const currentKey = useMemo(() => (current ? cityKey(current) : ""), [current]);
 
@@ -27,7 +22,6 @@ export default function Favorites({
 
     const key = cityKey(current);
     const exists = items.some((x) => cityKey(x) === key);
-
     const next = exists
       ? items.filter((x) => cityKey(x) !== key)
       : [current, ...items].slice(0, 10);
@@ -44,9 +38,9 @@ export default function Favorites({
       right={
         <button
           onClick={toggle}
-          disabled={!current || !mounted}
+          disabled={!current}
           className={`rounded-2xl px-3 py-2 text-xs border border-white/10 ${
-            !current || !mounted ? "opacity-40 cursor-not-allowed" : "hover:bg-white/10"
+            !current ? "opacity-40 cursor-not-allowed" : "hover:bg-white/10"
           }`}
           title={current ? "Додати/прибрати з обраних" : "Спочатку обери місто"}
         >
@@ -54,10 +48,7 @@ export default function Favorites({
         </button>
       }
     >
-      {/* Важливо: до mounted рендеримо той самий HTML, що і сервер */}
-      {!mounted ? (
-        <div className="text-sm text-slate-300/80">Завантажую обрані…</div>
-      ) : items.length === 0 ? (
+      {items.length === 0 ? (
         <div className="text-sm text-slate-300/80">Поки порожньо. Обери місто і натисни ☆</div>
       ) : (
         <div className="flex flex-wrap gap-2">
