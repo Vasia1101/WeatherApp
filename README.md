@@ -1,36 +1,161 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌦 WeatherApp
 
-## Getting Started
+Сучасний веб-додаток для перегляду погоди з живим пошуком міст, геолокацією та динамічним фоновим зображенням міста.
 
-First, run the development server:
+👉 Побудований на **Next.js (App Router)**, **TypeScript**, **Open-Meteo**, **OpenWeather Geocoding** та **Unsplash AP**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Можливості
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+-   🔍 **Пошук міст** (geocoding через Open-Meteo)
+    
+-   📍 **Моя локація** (Navigator Geolocation)
+    
+-   🌡 **Поточна погода**
+    
+-   🕒 **Погодинний прогноз (24h)**
+    
+-   📅 **7-денний прогноз**
+    
+-   ⭐ **Обрані міста** (localStorage)
+    
+-   🖼 **Динамічний фон міста** (Unsplash, через сервер)
+    
+-   🌗 Акуратний **glassmorphism UI**
+    
+-   ⚡ Кешування запитів (React Query + Next fetch revalidate)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🧱 Технології
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+-   **Next.js 16 (App Router, Turbopack)**
+    
+-   **React + TypeScript**
+    
+-   **Tailwind CSS**
+    
+-   **@tanstack/react-query**
+    
+-   **Open-Meteo API** — погода та geocoding
+    
+-   **OpenWeather Reverse Geocoding** — EN-назви міст
+    
+-   **Unsplash API** — фон міста
+    
+-   **ESLint** (strict rules)
 
-## Learn More
+## 📦 Структура проєкту
 
-To learn more about Next.js, take a look at the following resources:
+`src/
+├─ app/
+│  ├─ api/
+│  │  ├─ geocode/        # пошук міст (Open-Meteo)
+│  │  └─ unsplash/       # бекграунд міста (через сервер)
+│  ├─ layout.tsx
+│  └─ page.tsx
+│
+├─ components/
+│  ├─ CitySearch.tsx
+│  ├─ CityBackground.tsx
+│  ├─ CurrentWeatherCard.tsx
+│  ├─ HourlyChart.tsx
+│  ├─ DailyForecast.tsx
+│  ├─ Favorites.tsx
+│  ├─ GeoButton.tsx
+│  ├─ GeoPrompt.tsx
+│  └─ GlassCard.tsx
+│
+├─ lib/
+│  ├─ api.ts            # запити до Open-Meteo
+│  ├─ geo.ts            # геолокація
+│  ├─ storage.ts        # localStorage helpers
+│  ├─ types.ts
+│  └─ utils.ts
+│
+└─ styles/` 
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+----------
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🔑 Environment variables
 
-## Deploy on Vercel
+Створи файл **`.env.local`**:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`UNSPLASH_ACCESS_KEY=your_unsplash_key_here
+OPENWEATHER_API_KEY=your_openweather_key_here` 
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Де взяти ключі?
+
+-   Unsplash → [https://unsplash.com/developers](https://unsplash.com/developers)
+    
+-   OpenWeather → [https://openweathermap.org/api](https://openweathermap.org/api?utm_source=chatgpt.com)
+    
+
+----------
+
+## 🚀 Запуск проєкту
+
+`npm install
+npm run dev` 
+
+Відкрий:  
+👉 [http://localhost:3000](http://localhost:3000)
+
+----------
+
+## 🧪 Лінтинг
+
+`npm run lint` 
+
+Проєкт налаштований на **strict ESLint**, включно з:
+
+-   `react-hooks/exhaustive-deps`
+    
+-   `react-hooks/set-state-in-effect`
+    
+-   `@typescript-eslint/no-explicit-any`
+    
+
+----------
+
+## 🖼 Unsplash Attribution
+
+Фонові зображення використовуються відповідно до правил Unsplash.  
+Ім’я автора та посилання на Unsplash відображаються поверх фону.
+
+----------
+
+## 📌 Notes / Architecture decisions
+
+-   Компоненти, що працюють з `localStorage`, рендеряться **client-only** (`ssr:false`)
+    
+-   Unsplash API викликається **через серверний route**, щоб:
+    
+    -   не світити API key
+        
+    -   уникнути CORS
+        
+    -   контролювати кешування
+        
+-   Geocoding і weather — **один провайдер (Open-Meteo)** → стабільніше
+    
+
+----------
+
+## 🛣 Можливі покращення
+
+-   ⛅ Анімації погоди (Lottie / Canvas)
+    
+-   🌍 Зміна мови (i18n)
+    
+-   📱 PWA / offline cache
+    
+-   🧠 Smart background (weather-aware queries)
+    
+-   📊 Більше графіків
+    
+
+----------
+
+## 👨‍💻 Автор
+
+**Vasyl Haida**  
+Full-Stack / Frontend Engineer  
+🇺🇦
